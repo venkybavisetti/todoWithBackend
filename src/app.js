@@ -1,10 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
 const redis = require('redis');
+const REDIS_URL = process.env.REDIS_URL || '6379';
 
 const db = redis.createClient({
   db: 1,
-  port: process.env.REDIS_URL || 6379,
+  port: process.env.REDIS_URL || '6379',
 });
 
 const {
