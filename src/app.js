@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const redis = require('redis');
 const REDIS_URL = process.env.REDIS_URL || '6379';
-console.log(REDIS_URL);
+console.log(process.env.REDIS_URL);
 
 const db = redis.createClient(REDIS_URL);
 
