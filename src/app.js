@@ -21,6 +21,8 @@ app.locals.db = db;
 app.locals.Todo = { header: 'Todo List', todoList: [] };
 app.use(morgan('dev'));
 app.use(express.json());
+app.use('/todo', express.static('build'));
+app.use(express.static('build'));
 
 app.get('/api/getTodo', getTodo);
 
