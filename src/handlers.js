@@ -9,38 +9,39 @@ const getTodo = (req, res) => {
 };
 
 const deleteTasks = (req, res) => {
-  const { Todo } = req.app.locals;
+  const { Todo, db } = req.app.locals;
   Todo.todoList = [];
-  res.end();
+  Todo.header = 'Todo List';
+  db.saveTodo(Todo).then((status) => status && res.end());
 };
 
 const updateHeader = (req, res) => {
-  const { Todo } = req.app.locals;
+  const { Todo, db } = req.app.locals;
   const { header } = req.body;
   Todo.header = header;
-  res.end();
+  db.saveTodo(Todo).then((status) => status && res.end());
 };
 
 const updateTask = (req, res) => {
-  const { Todo } = req.app.locals;
+  const { Todo, db } = req.app.locals;
   const { taskId } = req.body;
   const task = Todo.todoList.find((task) => task.id === taskId);
   task.status = getNextStatus(task.status);
-  res.end();
+  db.saveTodo(Todo).then((status) => status && res.end());
 };
 
 const createTask = (req, res) => {
-  const { Todo } = req.app.locals;
+  const { Todo, db } = req.app.locals;
   const { text } = req.body;
   Todo.todoList.push({ text, id: generateId(), status: getDefaultStatus() });
-  res.end();
+  db.saveTodo(Todo).then((status) => status && res.end());
 };
 
 const deleteTask = (req, res) => {
-  const { Todo } = req.app.locals;
+  const { Todo, db } = req.app.locals;
   const { taskId } = req.body;
   Todo.todoList = Todo.todoList.filter((task) => task.id !== taskId);
-  res.end();
+  db.saveTodo(Todo).then((status) => status && res.end());
 };
 
 module.exports = {

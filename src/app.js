@@ -1,11 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const redis = require('redis');
-const REDIS_URL = process.env.REDIS_URL || '6379';
-console.log(process.env.REDIS_URL);
-
-const db = redis.createClient(REDIS_URL);
-
+const { DB } = require('./db');
 const {
   getTodo,
   deleteTasks,
@@ -15,9 +11,19 @@ const {
   deleteTask,
 } = require('./handlers');
 
+const REDIS_URL = process.env.REDIS_URL || '6379';
+console.log(process.env.REDIS_URL);
+
+const redisClient = redis.createClient(REDIS_URL);
+const db = new DB(redisClient);
+
+db.loadTodo().then((todo) => {
+  const defaultTodo = { header: 'Todo List', todoList: [] };
+  app.locals.Todo = todo || defaultTodo;
+});
+
 const app = express();
 app.locals.db = db;
-app.locals.Todo = { header: 'Todo List', todoList: [] };
 app.use(morgan('dev'));
 app.use(express.json());
 app.use('/todo', express.static('build'));
