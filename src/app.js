@@ -11,10 +11,10 @@ const {
   deleteTask,
 } = require('./handlers');
 
-const REDIS_URL = process.env.REDIS_URL || '6379';
-console.log(process.env.REDIS_URL);
+const url = process.env.REDIS_URL || '6379';
+console.log(process.env.REDIS_URL, url);
 
-const redisClient = redis.createClient(REDIS_URL);
+const redisClient = redis.createClient(url);
 const db = new DB(redisClient);
 
 db.loadTodo().then((todo) => {
