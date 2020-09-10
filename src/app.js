@@ -9,18 +9,13 @@ const {
   updateTask,
   createTask,
   deleteTask,
+  loadData,
 } = require('./handlers');
 
 const url = process.env.REDIS_URL || '6379';
-console.log(process.env.REDIS_URL, url);
 
 const redisClient = redis.createClient(url);
 const db = new DB(redisClient);
-
-db.loadTodo().then((todo) => {
-  const defaultTodo = { header: 'Todo List', todoList: [] };
-  app.locals.Todo = todo || defaultTodo;
-});
 
 const app = express();
 app.locals.db = db;
@@ -28,6 +23,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use('/todo', express.static('build'));
 app.use(express.static('build'));
+app.use(loadData);
 
 app.get('/api/getTodo', getTodo);
 
